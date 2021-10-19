@@ -1,7 +1,7 @@
-<template></template>
+<template>
+  <div></div>
+</template>
 
 <script>
-export default {
-  middleware: 'authenticated',
-}
+export default {}
 </script>

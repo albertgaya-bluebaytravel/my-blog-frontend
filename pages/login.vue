@@ -1,28 +1,45 @@
 <template>
   <div class="container mt-5">
     <div class="offset-3 col-6">
+      <b-alert :show="!!error" variant="danger">{{ error }}</b-alert>
+
       <b-card header="Login">
-        <b-form>
+        <b-form @submit.stop.prevent="onSubmit" novalidate>
           <b-form-group label="Email" label-for="email">
             <b-form-input
               id="email"
               name="email"
               type="email"
-              required
+              v-model="$v.form.email.$model"
+              :state="validateState('email')"
             ></b-form-input>
+
+            <b-form-invalid-feedback v-show="!$v.form.email.required">
+              This is a required field.
+            </b-form-invalid-feedback>
+
+            <b-form-invalid-feedback v-show="!$v.form.email.email">
+              Invalid email format.
+            </b-form-invalid-feedback>
           </b-form-group>
 
           <b-form-group label="Password" label-for="password">
             <b-form-input
               id="password"
-              name="password"
               type="password"
-              required
+              v-model.trim="$v.form.password.$model"
+              :state="validateState('password')"
             ></b-form-input>
+
+            <b-form-invalid-feedback>
+              This is a required field.
+            </b-form-invalid-feedback>
           </b-form-group>
 
           <div>
-            <b-button type="submit" variant="primary" class>Submit</b-button>
+            <b-button type="submit" variant="primary" :disabled="submitted">
+              Submit
+            </b-button>
 
             <nuxt-link to="/create-account" class="float-right mt-2">
               Create account
@@ -35,7 +52,53 @@
 </template>
 
 <script>
+import { validationMixin } from 'vuelidate'
+import { required, email } from 'vuelidate/lib/validators'
+
 export default {
-  layout: 'none',
+  mixins: [validationMixin],
+
+  data() {
+    return {
+      error: '',
+      submitted: false,
+      form: {
+        email: '',
+        password: '',
+      },
+    }
+  },
+
+  validations: {
+    form: {
+      email: {
+        required,
+        email,
+      },
+      password: {
+        required,
+      },
+    },
+  },
+
+  methods: {
+    validateState(name) {
+      const { $dirty, $error } = this.$v.form[name]
+      return $dirty ? !$error : null
+    },
+
+    async onSubmit() {
+      this.$v.form.$touch()
+      this.error = ''
+      this.submitted = true
+
+      try {
+        await this.$axios.$post('/users/login', this.form)
+      } catch ({ response }) {
+        this.error = response.data.message
+        this.submitted = false
+      }
+    },
+  },
 }
 </script>

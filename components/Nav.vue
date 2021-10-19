@@ -24,7 +24,7 @@
             >
           </b-nav-form> -->
 
-          <b-nav-item-dropdown right>
+          <b-nav-item-dropdown right v-if="gm_authorized">
             <!-- Using 'button-content' slot -->
             <template #button-content>
               <em>User</em>
@@ -32,8 +32,14 @@
             <b-dropdown-item href="#">Profile</b-dropdown-item>
             <b-dropdown-item href="#">Sign Out</b-dropdown-item>
           </b-nav-item-dropdown>
+
+          <b-nav-item to="/login">Login</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
   </div>
 </template>
+
+<script>
+export default {}
+</script>

@@ -1,28 +1,15 @@
 // Create Store
-export const state = () => ({
-    authorized: false
-})
+export const state = () => ({})
 
 // Getters
 export const getters = {
-    authorized(state)
-    {
-        return state.authorized
-    }
+  authorized(state) {
+    return state.auth.loggedIn
+  },
 }
 
 // Mutations
-export const mutations = {
-    SET_AUTHORIZED(state, authorized)
-    {
-        state.authorized = authorized
-    }
-}
+export const mutations = {}
 
 // Actions
-export const actions = {
-    setAuthorized({ commit }, authorized)
-    {
-        commit('SET_AUTHORIZED', authorized)
-    }
-}
+export const actions = {}

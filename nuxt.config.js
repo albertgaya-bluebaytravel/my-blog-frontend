@@ -32,6 +32,7 @@ export default {
     'bootstrap-vue/nuxt',
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/auth-next',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -39,10 +40,38 @@ export default {
     common: {
       Accept: 'application/json',
     },
+    proxy: true,
+  },
 
-    baseUrl: 'http://127.0.0.1:8000/api/v1',
+  proxy: {
+    '/laravel': {
+      target: 'http://my-blog-backend.test',
+      pathRewrite: { '^/laravel': '/' },
+    },
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
+
+  auth: {
+    strategies: {
+      laravelSanctum: {
+        provider: 'laravel/sanctum',
+        url: '/laravel/api/v1',
+        endpoints: {
+          login: {
+            url: '/users/login',
+            method: 'post',
+            propertyName: 'data.token',
+          },
+          user: {
+            url: '/users/auth',
+            method: 'get',
+            propertyName: 'data.user',
+          },
+          logout: false,
+        },
+      },
+    },
+  },
 }

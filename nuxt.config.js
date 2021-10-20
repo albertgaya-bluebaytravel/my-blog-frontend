@@ -37,16 +37,18 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    common: {
+    headers: {
       Accept: 'application/json',
+      'Content-Type': 'application/json',
     },
     proxy: true,
+    credentials: true,
   },
 
   proxy: {
-    '/laravel': {
-      target: 'http://my-blog-backend.test',
-      pathRewrite: { '^/laravel': '/' },
+    '/api': {
+      target: 'http://my-blog-backend.test/api',
+      pathRewrite: { '^/api': '/' },
     },
   },
 
@@ -57,15 +59,15 @@ export default {
     strategies: {
       laravelSanctum: {
         provider: 'laravel/sanctum',
-        url: '/laravel/api/v1',
+        url: '/api',
         endpoints: {
           login: {
-            url: '/users/login',
+            url: '/api/v1/users/login',
             method: 'post',
             propertyName: 'data.token',
           },
           user: {
-            url: '/users/auth',
+            url: '/api/v1/users/auth',
             method: 'get',
             propertyName: 'data.user',
           },

@@ -38,11 +38,11 @@
             </b-form-group>
 
             <div>
-              <b-button type="submit" variant="primary" :disabled="submitted">
+              <b-button type="submit" variant="info" :disabled="submitted">
                 Submit
               </b-button>
 
-              <nuxt-link to="/create-account" class="float-right mt-2">
+              <nuxt-link to="/signup" class="float-right mt-2">
                 Create account
               </nuxt-link>
             </div>
@@ -84,14 +84,12 @@ export default {
   },
 
   methods: {
-    validateState(name) {
-      const { $dirty, $error } = this.$v.form[name]
-      return $dirty ? !$error : null
-    },
-
     onSubmit() {
       this.$v.form.$touch()
       this.error = ''
+
+      if (this.$v.form.$invalid) return
+
       this.submitted = true
 
       this.$auth

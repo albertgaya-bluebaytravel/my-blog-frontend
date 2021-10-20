@@ -54,12 +54,9 @@
 </template>
 
 <script>
-import { validationMixin } from 'vuelidate'
 import { required, email } from 'vuelidate/lib/validators'
 
 export default {
-  mixins: [validationMixin],
-
   data() {
     return {
       error: '',
@@ -81,6 +78,12 @@ export default {
         required,
       },
     },
+  },
+
+  mounted() {
+    if (this.$store.getters.authorized) {
+      this.$router.push('/')
+    }
   },
 
   methods: {

@@ -1,15 +1,16 @@
 <template>
   <div>
-    <Nav />
+    <app-nav />
     <nuxt />
   </div>
 </template>
 
 <script>
-import Nav from '@/components/Nav'
+import AppNav from '@/components/Nav'
+
 export default {
   components: {
-    Nav,
+    AppNav,
   },
 }
 </script>

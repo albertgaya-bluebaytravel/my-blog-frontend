@@ -98,13 +98,11 @@
     </div>
   </div>
 </template>
+
 <script>
-import { validationMixin } from 'vuelidate'
 import { required, email, sameAs } from 'vuelidate/lib/validators'
 
 export default {
-  mixins: [validationMixin],
-
   data() {
     return {
       success: false,

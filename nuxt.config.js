@@ -41,15 +41,8 @@ export default {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    proxy: true,
     credentials: true,
-  },
-
-  proxy: {
-    '/api': {
-      target: 'http://my-blog-backend.test/api',
-      pathRewrite: { '^/api': '/' },
-    },
+    baseURL: 'http://localhost:8000/api',
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
@@ -59,15 +52,15 @@ export default {
     strategies: {
       laravelSanctum: {
         provider: 'laravel/sanctum',
-        url: '/api',
+        url: 'http://localhost:8000/api',
         endpoints: {
           login: {
-            url: '/api/v1/users/login',
+            url: '/v1/users/login',
             method: 'post',
             propertyName: 'data.token',
           },
           user: {
-            url: '/api/v1/users/auth',
+            url: '/v1/users/auth',
             method: 'get',
             propertyName: 'data.user',
           },

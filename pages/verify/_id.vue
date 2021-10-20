@@ -43,7 +43,7 @@ export default {
 
       .then((response) => {
         this.success = true
-        console.log('Success')
+        this.$router.push('/')
       })
 
       .catch((error) => {

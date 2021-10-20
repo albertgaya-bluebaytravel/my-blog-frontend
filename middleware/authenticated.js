@@ -1,6 +1,5 @@
-export default function ({ store, redirect, error }) {
-  if (!store.state.authenticated) {
-    console.log(error)
+export default function ({ store, redirect }) {
+  if (!store.getters.authorized) {
     return redirect('/login')
   }
 }

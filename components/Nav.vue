@@ -30,10 +30,12 @@
               <em>User</em>
             </template>
             <b-dropdown-item href="#">Profile</b-dropdown-item>
-            <b-dropdown-item href="#">Sign Out</b-dropdown-item>
+            <b-dropdown-item href="#" @click="onSignOut"
+              >Sign Out</b-dropdown-item
+            >
           </b-nav-item-dropdown>
 
-          <b-nav-item to="/login">Login</b-nav-item>
+          <b-nav-item to="/login" v-else>Login</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
@@ -41,5 +43,20 @@
 </template>
 
 <script>
-export default {}
+export default {
+  methods: {
+    onSignOut() {
+      this.$auth
+        .logout('laravelSantum')
+
+        .then(() => {
+          this.$router.push('/login')
+        })
+
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+  },
+}
 </script>

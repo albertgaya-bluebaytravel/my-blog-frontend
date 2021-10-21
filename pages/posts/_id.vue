@@ -55,14 +55,39 @@
 import { required } from 'vuelidate/lib/validators'
 
 export default {
+  data() {
+    return {
+      success: false,
+      submitted: false,
+      post: {},
+      form: {
+        title: '',
+        body: '',
+      },
+    }
+  },
+
+  async middleware({ $axios, store, route, redirect }) {
+    await $axios
+      .$get(`/v1/posts/${route.params.id}`)
+
+      .then((response) => {
+        const post = response.data.post
+
+        if (post.user_id !== store.getters.auth_user.id) {
+          redirect('/')
+        }
+      })
+  },
+
   async beforeMount() {
     return await this.$axios
       .$get(`/v1/posts/${this.$route.params.id}`)
 
       .then((response) => {
         const post = response.data.post
-        console.log(post)
 
+        this.post = post
         this.form.title = post.title
         this.form.body = post.body
       })
@@ -70,17 +95,6 @@ export default {
       .catch((error) => {
         console.log(error)
       })
-  },
-
-  data() {
-    return {
-      success: false,
-      submitted: false,
-      form: {
-        title: '',
-        body: '',
-      },
-    }
   },
 
   validations: {

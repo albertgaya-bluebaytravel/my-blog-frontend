@@ -1,8 +1,8 @@
 <template>
   <div class="container mt-5">
     <div class="offset-3 col-6">
-      <b-overlay :show="submitted" v-if="!success">
-        <b-card header="Create Post">
+      <b-card header="Edit Post">
+        <b-overlay :show="submitted" v-if="!success">
           <b-form @submit.stop.prevent="onSubmit" novalidate>
             <b-form-group label="Title" label-for="title">
               <b-form-input
@@ -33,12 +33,20 @@
               </b-form-invalid-feedback>
             </b-form-group>
 
-            <b-button type="submit" variant="info" :disabled="submitted">
-              Submit
-            </b-button>
+            <div>
+              <b-button type="submit" variant="info" :disabled="submitted">
+                Submit
+              </b-button>
+
+              <nuxt-link to="/">
+                <b-button variant="link" :disabled="submitted">
+                  Cancel
+                </b-button>
+              </nuxt-link>
+            </div>
           </b-form>
-        </b-card>
-      </b-overlay>
+        </b-overlay>
+      </b-card>
     </div>
   </div>
 </template>
@@ -47,7 +55,22 @@
 import { required } from 'vuelidate/lib/validators'
 
 export default {
-  middleware: ['authenticated'],
+  async beforeMount() {
+    return await this.$axios
+      .$get(`/v1/posts/${this.$route.params.id}`)
+
+      .then((response) => {
+        const post = response.data.post
+        console.log(post)
+
+        this.form.title = post.title
+        this.form.body = post.body
+      })
+
+      .catch((error) => {
+        console.log(error)
+      })
+  },
 
   data() {
     return {
@@ -81,7 +104,7 @@ export default {
       this.submitted = true
 
       this.$axios
-        .$post('/v1/posts', this.form)
+        .$patch(`/v1/posts/${this.$route.params.id}`, this.form)
 
         .then(() => {
           this.success = true

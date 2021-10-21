@@ -2,7 +2,18 @@
   <div class="container mt-5">
     <div class="Post">
       <div v-for="post in posts" :key="post.id" class="Post__box">
-        <app-post :title="post.title" :body="post.body" class="Post__card" />
+        <nuxt-link
+          :to="{ name: 'posts-id', params: { id: post.id } }"
+          class="Post__action"
+        >
+          <b-icon-pencil-square />
+        </nuxt-link>
+        <app-post
+          :title="post.title"
+          :body="post.body"
+          :author="post.user.name"
+          class="Post__card"
+        />
       </div>
     </div>
   </div>
@@ -37,7 +48,20 @@ export default {
 .Post {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  gap: 15px;
+
+  &__box {
+    position: relative;
+  }
+
+  &__action {
+    position: absolute;
+    z-index: 1;
+    right: 5px;
+    top: 5px;
+    z-index: 1;
+    color: inherit;
+  }
 
   &__card {
     height: 100%;

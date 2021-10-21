@@ -1,23 +1,21 @@
 <template>
-  <div>
-    <div class="container mt-5 text-center">
-      <div v-if="!error && !success">
-        <h1>Verifying your account</h1>
-        <p>Please wait...</p>
-        <b-spinner label="Loading..."></b-spinner>
-      </div>
+  <div class="container mt-5 text-center">
+    <div v-if="!error && !success">
+      <h1>Verifying your account</h1>
+      <p>Please wait...</p>
+      <b-spinner label="Loading..."></b-spinner>
+    </div>
 
-      <div v-if="error">
-        <h1>{{ error }}</h1>
-        <p>Click below to login</p>
-        <nuxt-link to="/login" class="btn btn-info">Login</nuxt-link>
-      </div>
+    <div v-if="error">
+      <h1>{{ error }}</h1>
+      <p>Click below to login</p>
+      <nuxt-link to="/login" class="btn btn-info">Login</nuxt-link>
+    </div>
 
-      <div v-if="success && !error">
-        <h1>Account verified!</h1>
-        <p>Click below to login</p>
-        <nuxt-link to="/login" class="btn btn-info">Login</nuxt-link>
-      </div>
+    <div v-if="success && !error">
+      <h1>Account verified!</h1>
+      <p>Click below to login</p>
+      <nuxt-link to="/login" class="btn btn-info">Login</nuxt-link>
     </div>
   </div>
 </template>

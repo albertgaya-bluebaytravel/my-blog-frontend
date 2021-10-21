@@ -1,10 +1,10 @@
 <template>
-  <b-overlay :show="submitted">
-    <div class="container mt-5">
-      <div class="offset-3 col-6">
-        <b-alert :show="!!error" variant="danger">{{ error }}</b-alert>
+  <div class="container mt-5">
+    <div class="offset-3 col-6">
+      <b-alert :show="!!error" variant="danger">{{ error }}</b-alert>
 
-        <b-card header="Login">
+      <b-card header="Login">
+        <b-overlay :show="submitted">
           <b-form @submit.stop.prevent="onSubmit" novalidate>
             <b-form-group label="Email" label-for="email">
               <b-form-input
@@ -47,10 +47,10 @@
               </nuxt-link>
             </div>
           </b-form>
-        </b-card>
-      </div>
+        </b-overlay>
+      </b-card>
     </div>
-  </b-overlay>
+  </div>
 </template>
 
 <script>

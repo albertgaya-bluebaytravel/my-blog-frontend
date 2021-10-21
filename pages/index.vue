@@ -1,11 +1,11 @@
 <template>
   <div class="container mt-5">
-    <div class="Post">
-      <div v-for="post in posts" :key="post.id" class="Post__box">
+    <div class="post">
+      <div v-for="post in posts" :key="post.id" class="post__box">
         <nuxt-link
-          :to="{ name: 'posts-id', params: { id: post.id } }"
-          class="Post__action"
           v-if="gm_authorized && post.user.id === gm_login_user.id"
+          :to="{ name: 'posts-id', params: { id: post.id } }"
+          class="post__action"
         >
           <b-icon-pencil-square />
         </nuxt-link>
@@ -13,7 +13,7 @@
           :title="post.title"
           :body="post.body"
           :author="post.user.name"
-          class="Post__card"
+          class="post__card"
         />
       </div>
     </div>
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import AppPost from '@/components/Post'
+import AppPost from '@/components/Post';
 
 export default {
   components: {
@@ -31,22 +31,19 @@ export default {
   data() {
     return {
       posts: [],
-    }
+    };
   },
 
   mounted() {
-    this.$axios
-      .$get('/v1/posts')
-
-      .then(({ data }) => {
-        this.posts = data.posts
-      })
+    this.$axios.$get('/v1/posts').then(({ data }) => {
+      this.posts = data.posts;
+    });
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
-.Post {
+.post {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 15px;
@@ -60,7 +57,6 @@ export default {
     z-index: 1;
     right: 5px;
     top: 5px;
-    z-index: 1;
     color: inherit;
   }
 

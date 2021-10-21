@@ -26,28 +26,28 @@ export default {
     return {
       success: false,
       error: '',
-    }
+    };
   },
 
   mounted() {
-    const { id } = this.$route.params
-    const { token } = this.$route.query
+    const { id } = this.$route.params;
+    const { token } = this.$route.query;
 
-    this.success = false
-    this.error = ''
+    this.success = false;
+    this.error = '';
 
     this.$axios
       .$get(`/v1/users/${id}/verify/${token}`)
 
       .then(() => {
-        this.success = true
-        this.$router.push('/')
+        this.success = true;
+        this.$router.push('/');
       })
 
       .catch((error) => {
-        console.log(error)
-        this.error = error.response.data.message
-      })
+        console.log(error);
+        this.error = error.response.data.message;
+      });
   },
-}
+};
 </script>

@@ -3,8 +3,8 @@
     <div class="offset-3 col-6">
       <b-alert :show="!!error" variant="danger">{{ error }}</b-alert>
 
-      <b-card header="Login">
-        <b-overlay :show="submitted">
+      <b-overlay :show="submitted">
+        <b-card header="Login">
           <b-form @submit.stop.prevent="onSubmit" novalidate>
             <b-form-group label="Email" label-for="email">
               <b-form-input
@@ -13,7 +13,7 @@
                 type="email"
                 v-model="$v.form.email.$model"
                 :state="validateState('email')"
-              ></b-form-input>
+              />
 
               <b-form-invalid-feedback v-show="!$v.form.email.required">
                 This is a required field.
@@ -30,7 +30,7 @@
                 type="password"
                 v-model.trim="$v.form.password.$model"
                 :state="validateState('password')"
-              ></b-form-input>
+              />
 
               <b-form-invalid-feedback>
                 This is a required field.
@@ -47,14 +47,14 @@
               </nuxt-link>
             </div>
           </b-form>
-        </b-overlay>
-      </b-card>
+        </b-card>
+      </b-overlay>
     </div>
   </div>
 </template>
 
 <script>
-import { required, email } from 'vuelidate/lib/validators'
+import { required, email } from 'vuelidate/lib/validators';
 
 export default {
   data() {
@@ -65,7 +65,7 @@ export default {
         email: '',
         password: '',
       },
-    }
+    };
   },
 
   validations: {
@@ -82,37 +82,34 @@ export default {
 
   mounted() {
     if (this.$store.getters.authorized) {
-      this.$router.push('/')
+      this.$router.push('/');
     }
   },
 
   methods: {
     onSubmit() {
-      this.$v.form.$touch()
-      this.error = ''
+      this.$v.form.$touch();
+      this.error = '';
 
-      if (this.$v.form.$invalid) return
+      if (this.$v.form.$invalid) return;
 
-      this.submitted = true
+      this.submitted = true;
 
       this.$auth
         .loginWith('laravelSanctum', {
           data: this.form,
         })
-
         .then(() => {
-          this.$router.push('/')
+          this.$router.push('/');
         })
-
         .catch((error) => {
-          console.log(error)
-          this.error = error.response.data.message
+          console.log(error);
+          this.error = error.response.data.message;
         })
-
         .finally(() => {
-          this.submitted = false
-        })
+          this.submitted = false;
+        });
     },
   },
-}
+};
 </script>

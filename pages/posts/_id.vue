@@ -1,8 +1,8 @@
 <template>
   <div class="container mt-5">
     <div class="offset-3 col-6">
-      <b-card header="Edit Post">
-        <b-overlay :show="submitted" v-if="!success">
+      <b-overlay :show="submitted" v-if="!success">
+        <b-card header="Edit Post">
           <b-form @submit.stop.prevent="onSubmit" novalidate>
             <b-form-group label="Title" label-for="title">
               <b-form-input
@@ -11,7 +11,7 @@
                 type="text"
                 v-model="$v.form.title.$model"
                 :state="validateState('title')"
-              ></b-form-input>
+              />
 
               <b-form-invalid-feedback>
                 This is a required field.
@@ -26,7 +26,7 @@
                 no-resize
                 v-model="$v.form.body.$model"
                 :state="validateState('body')"
-              ></b-form-textarea>
+              />
 
               <b-form-invalid-feedback>
                 This is a required field.
@@ -54,14 +54,14 @@
               </b-button>
             </div>
           </b-form>
-        </b-overlay>
-      </b-card>
+        </b-card>
+      </b-overlay>
     </div>
   </div>
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators'
+import { required } from 'vuelidate/lib/validators';
 
 export default {
   data() {
@@ -73,42 +73,37 @@ export default {
         title: '',
         body: '',
       },
-    }
+    };
   },
 
   async middleware({ $axios, store, route, redirect }) {
     await $axios
       .$get(`/v1/posts/${route.params.id}`)
-
       .then((response) => {
-        const post = response.data.post
+        const post = response.data.post;
 
         if (post.user_id !== store.getters.auth_user.id) {
-          redirect('/')
+          redirect('/');
         }
       })
-
       .catch((error) => {
-        console.log(error)
-        redirect('/')
-      })
+        console.log(error);
+        redirect('/');
+      });
   },
 
   async beforeMount() {
     return await this.$axios
       .$get(`/v1/posts/${this.$route.params.id}`)
-
       .then((response) => {
-        const post = response.data.post
-
-        this.post = post
-        this.form.title = post.title
-        this.form.body = post.body
+        const post = response.data.post;
+        this.post = post;
+        this.form.title = post.title;
+        this.form.body = post.body;
       })
-
       .catch((error) => {
-        console.log(error)
-      })
+        console.log(error);
+      });
   },
 
   validations: {
@@ -124,49 +119,43 @@ export default {
 
   methods: {
     onSubmit() {
-      this.$v.form.$touch()
-      this.error = ''
+      this.$v.form.$touch();
+      this.error = '';
 
-      if (this.$v.form.$invalid) return
+      if (this.$v.form.$invalid) return;
 
-      this.submitted = true
+      this.submitted = true;
 
       this.$axios
         .$patch(`/v1/posts/${this.$route.params.id}`, this.form)
-
         .then(() => {
-          this.success = true
-          this.$router.push('/')
+          this.success = true;
+          this.$router.push('/');
         })
-
         .catch((error) => {
-          console.log(error)
+          console.log(error);
         })
-
         .finally(() => {
-          this.submitted = false
-        })
+          this.submitted = false;
+        });
     },
 
     onDelete() {
-      this.submitted = true
+      this.submitted = true;
 
       this.$axios
         .$delete(`/v1/posts/${this.$route.params.id}`)
-
         .then(() => {
-          this.success = true
-          this.$router.push('/')
+          this.success = true;
+          this.$router.push('/');
         })
-
         .catch((error) => {
-          console.log(error)
+          console.log(error);
         })
-
         .finally(() => {
-          this.submitted = false
-        })
+          this.submitted = false;
+        });
     },
   },
-}
+};
 </script>

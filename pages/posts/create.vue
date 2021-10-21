@@ -11,7 +11,7 @@
                 type="text"
                 v-model="$v.form.title.$model"
                 :state="validateState('title')"
-              ></b-form-input>
+              />
 
               <b-form-invalid-feedback>
                 This is a required field.
@@ -26,7 +26,7 @@
                 no-resize
                 v-model="$v.form.body.$model"
                 :state="validateState('body')"
-              ></b-form-textarea>
+              />
 
               <b-form-invalid-feedback>
                 This is a required field.
@@ -90,16 +90,13 @@ export default {
 
       this.$axios
         .$post('/v1/posts', this.form)
-
         .then(() => {
           this.success = true
           this.$router.push('/')
         })
-
         .catch((error) => {
           console.log(error)
         })
-
         .finally(() => {
           this.submitted = false
         })

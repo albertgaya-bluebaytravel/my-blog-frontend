@@ -13,7 +13,7 @@
                     type="text"
                     v-model="$v.form.name.$model"
                     :state="validateState('name')"
-                  ></b-form-input>
+                  />
 
                   <b-form-invalid-feedback>
                     This is a required field.
@@ -27,7 +27,7 @@
                     type="email"
                     v-model="$v.form.email.$model"
                     :state="validateState('email')"
-                  ></b-form-input>
+                  />
 
                   <b-form-invalid-feedback v-show="!$v.form.email.required">
                     This is a required field.
@@ -45,7 +45,7 @@
                     type="password"
                     v-model.trim="$v.form.password.$model"
                     :state="validateState('password')"
-                  ></b-form-input>
+                  />
 
                   <b-form-invalid-feedback>
                     This is a required field.
@@ -62,7 +62,7 @@
                     type="password"
                     v-model.trim="$v.form.password_confirmation.$model"
                     :state="validateState('password_confirmation')"
-                  ></b-form-input>
+                  />
 
                   <b-form-invalid-feedback
                     v-show="!$v.form.password_confirmation.required"
@@ -102,7 +102,7 @@
 </template>
 
 <script>
-import { required, email, sameAs } from 'vuelidate/lib/validators'
+import { required, email, sameAs } from 'vuelidate/lib/validators';
 
 export default {
   data() {
@@ -115,7 +115,7 @@ export default {
         password: '',
         password_confirmation: '',
       },
-    }
+    };
   },
 
   validations: {
@@ -140,25 +140,23 @@ export default {
 
   methods: {
     async onSubmit() {
-      this.$v.form.$touch()
-      this.error = ''
+      this.$v.form.$touch();
+      this.error = '';
 
-      if (this.$v.form.$invalid) return
+      if (this.$v.form.$invalid) return;
 
-      this.submitted = true
+      this.submitted = true;
 
-      await this.$axios.get('sanctum/csrf-cookie')
+      await this.$axios.get('sanctum/csrf-cookie');
       this.$axios
         .$post('/v1/users/register', this.form)
-
         .then(() => {
-          this.success = true
+          this.success = true;
         })
-
         .catch((error) => {
-          console.log(error)
-        })
+          console.log(error);
+        });
     },
   },
-}
+};
 </script>

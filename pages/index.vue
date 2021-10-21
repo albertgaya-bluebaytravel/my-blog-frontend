@@ -10,9 +10,10 @@
           <b-icon-pencil-square />
         </nuxt-link>
         <app-post
-          :title="post.title"
-          :body="post.body"
           :author="post.user.name"
+          :body="post.body"
+          :created_at="post.created_at"
+          :title="post.title"
           class="post__card"
         />
       </div>
@@ -61,7 +62,7 @@ export default {
   }
 
   &__card {
-    height: 100%;
+    height: 280px;
 
     &:not(:last-child) {
       margin-bottom: 20px;

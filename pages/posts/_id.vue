@@ -33,7 +33,7 @@
               </b-form-invalid-feedback>
             </b-form-group>
 
-            <div>
+            <div class="d-flex">
               <b-button type="submit" variant="info" :disabled="submitted">
                 Submit
               </b-button>
@@ -43,6 +43,15 @@
                   Cancel
                 </b-button>
               </nuxt-link>
+
+              <b-button
+                variant="danger"
+                class="ml-auto"
+                :disabled="submitted"
+                @click="onDelete"
+              >
+                Delete
+              </b-button>
             </div>
           </b-form>
         </b-overlay>
@@ -77,6 +86,11 @@ export default {
         if (post.user_id !== store.getters.auth_user.id) {
           redirect('/')
         }
+      })
+
+      .catch((error) => {
+        console.log(error)
+        redirect('/')
       })
   },
 
@@ -119,6 +133,26 @@ export default {
 
       this.$axios
         .$patch(`/v1/posts/${this.$route.params.id}`, this.form)
+
+        .then(() => {
+          this.success = true
+          this.$router.push('/')
+        })
+
+        .catch((error) => {
+          console.log(error)
+        })
+
+        .finally(() => {
+          this.submitted = false
+        })
+    },
+
+    onDelete() {
+      this.submitted = true
+
+      this.$axios
+        .$delete(`/v1/posts/${this.$route.params.id}`)
 
         .then(() => {
           this.success = true

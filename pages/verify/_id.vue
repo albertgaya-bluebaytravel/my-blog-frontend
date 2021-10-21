@@ -37,9 +37,9 @@ export default {
     this.error = ''
 
     this.$axios
-      .$get(`/api/v1/users/${id}/verify/${token}`)
+      .$get(`/v1/users/${id}/verify/${token}`)
 
-      .then((response) => {
+      .then(() => {
         this.success = true
         this.$router.push('/')
       })

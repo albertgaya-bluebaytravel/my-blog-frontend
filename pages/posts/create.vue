@@ -33,9 +33,17 @@
               </b-form-invalid-feedback>
             </b-form-group>
 
-            <b-button type="submit" variant="info" :disabled="submitted">
-              Submit
-            </b-button>
+            <div>
+              <b-button type="submit" variant="info" :disabled="submitted">
+                Submit
+              </b-button>
+
+              <nuxt-link to="/">
+                <b-button variant="link" :disabled="submitted">
+                  Cancel
+                </b-button>
+              </nuxt-link>
+            </div>
           </b-form>
         </b-card>
       </b-overlay>

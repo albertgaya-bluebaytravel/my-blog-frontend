@@ -7,7 +7,9 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav v-if="gm_authorized">
-          <b-nav-item to="/posts/create">Create Post</b-nav-item>
+          <b-nav-item to="/posts/create"
+            ><b-icon-file-earmark-plus /> Create Post</b-nav-item
+          >
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
@@ -27,15 +29,17 @@
           <b-nav-item-dropdown right v-if="gm_authorized">
             <!-- Using 'button-content' slot -->
             <template #button-content>
-              <em>{{ gm_login_user.name }}</em>
+              <b-icon-person-circle /> {{ gm_login_user.name }}
             </template>
-            <b-dropdown-item href="#">Profile</b-dropdown-item>
-            <b-dropdown-item href="#" @click="onSignOut"
-              >Sign Out</b-dropdown-item
-            >
+            <!-- <b-dropdown-item href="#">Profile</b-dropdown-item> -->
+            <b-dropdown-item href="#" @click="onSignOut">
+              Sign Out
+            </b-dropdown-item>
           </b-nav-item-dropdown>
 
-          <b-nav-item to="/login" v-else>Login</b-nav-item>
+          <b-nav-item to="/login" v-else>
+            <b-icon-box-arrow-in-right /> Login
+          </b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>

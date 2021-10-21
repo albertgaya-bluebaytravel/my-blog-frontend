@@ -3,7 +3,10 @@
     {{ body }}
 
     <template #footer>
-      <small>Posted by: {{ author }}</small>
+      <div class="d-flex">
+        <small><b-icon-person-circle class="icon" /> {{ author }}</small>
+        <b-icon-chat-dots-fill class="ml-auto" />
+      </div>
     </template>
   </b-card>
 </template>
@@ -30,5 +33,9 @@ export default {
 <style lang="scss" scoped>
 small {
   font-size: 0.8rem;
+
+  .icon {
+    transform: translateY(-1px);
+  }
 }
 </style>

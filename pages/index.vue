@@ -5,7 +5,7 @@
         <nuxt-link
           :to="{ name: 'posts-id', params: { id: post.id } }"
           class="Post__action"
-          v-if="post.user.id === gm_login_user.id"
+          v-if="gm_authorized && post.user.id === gm_login_user.id"
         >
           <b-icon-pencil-square />
         </nuxt-link>

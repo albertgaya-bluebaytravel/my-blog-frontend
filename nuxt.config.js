@@ -57,14 +57,16 @@ export default {
           login: {
             url: '/v1/users/login',
             method: 'post',
-            propertyName: 'data.token',
           },
           user: {
             url: '/v1/users/auth',
             method: 'get',
-            propertyName: 'data.user',
+            property: 'data.user',
           },
           logout: false,
+        },
+        user: {
+          property: 'data.user',
         },
       },
     },

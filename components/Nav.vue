@@ -27,7 +27,7 @@
           <b-nav-item-dropdown right v-if="gm_authorized">
             <!-- Using 'button-content' slot -->
             <template #button-content>
-              <em>User</em>
+              <em>{{ gm_login_user.name }}</em>
             </template>
             <b-dropdown-item href="#">Profile</b-dropdown-item>
             <b-dropdown-item href="#" @click="onSignOut"

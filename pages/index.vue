@@ -1,13 +1,9 @@
 <template>
   <div class="container mt-5">
     <div class="Post">
-      <app-post
-        v-for="post in posts"
-        :key="post.id"
-        :title="post.title"
-        :body="post.body"
-        class="Post__card"
-      />
+      <div v-for="post in posts" :key="post.id" class="Post__box">
+        <app-post :title="post.title" :body="post.body" class="Post__card" />
+      </div>
     </div>
   </div>
 </template>

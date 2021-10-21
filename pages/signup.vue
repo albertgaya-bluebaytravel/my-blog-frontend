@@ -137,7 +137,7 @@ export default {
   },
 
   methods: {
-    onSubmit() {
+    async onSubmit() {
       this.$v.form.$touch()
       this.error = ''
 
@@ -145,8 +145,9 @@ export default {
 
       this.submitted = true
 
+      // await this.$axios.get('sanctum/csrf-cookie')
       this.$axios
-        .$post('/api/v1/users/register', this.form)
+        .$post('/v1/users/register', this.form)
 
         .then(() => {
           this.success = true

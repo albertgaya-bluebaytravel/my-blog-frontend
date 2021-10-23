@@ -38,11 +38,9 @@
                 Submit
               </b-button>
 
-              <nuxt-link to="/">
-                <b-button variant="link" :disabled="submitted">
-                  Cancel
-                </b-button>
-              </nuxt-link>
+              <b-button variant="link" :disabled="submitted" to="/">
+                Cancel
+              </b-button>
             </div>
           </b-form>
         </b-card>
@@ -52,7 +50,7 @@
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators'
+import { required } from 'vuelidate/lib/validators';
 
 export default {
   middleware: ['authenticated'],
@@ -65,7 +63,7 @@ export default {
         title: '',
         body: '',
       },
-    }
+    };
   },
 
   validations: {
@@ -81,26 +79,26 @@ export default {
 
   methods: {
     onSubmit() {
-      this.$v.form.$touch()
-      this.error = ''
+      this.$v.form.$touch();
+      this.error = '';
 
-      if (this.$v.form.$invalid) return
+      if (this.$v.form.$invalid) return;
 
-      this.submitted = true
+      this.submitted = true;
 
       this.$axios
         .$post('/v1/posts', this.form)
         .then(() => {
-          this.success = true
-          this.$router.push('/')
+          this.success = true;
+          this.$router.push('/');
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
         })
         .finally(() => {
-          this.submitted = false
-        })
+          this.submitted = false;
+        });
     },
   },
-}
+};
 </script>

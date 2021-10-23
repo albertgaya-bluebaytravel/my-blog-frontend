@@ -38,11 +38,9 @@
                 Submit
               </b-button>
 
-              <nuxt-link to="/">
-                <b-button variant="link" :disabled="submitted">
-                  Cancel
-                </b-button>
-              </nuxt-link>
+              <b-button variant="link" :disabled="submitted" to="/">
+                Cancel
+              </b-button>
 
               <b-button
                 variant="danger"
@@ -93,7 +91,7 @@ export default {
   },
 
   async beforeMount() {
-    return await this.$axios
+    await this.$axios
       .$get(`/v1/posts/${this.$route.params.id}`)
       .then((response) => {
         const post = response.data.post;

@@ -2,18 +2,11 @@
   <div class="container mt-5">
     <div class="post">
       <div v-for="post in posts" :key="post.id" class="post__box">
-        <nuxt-link
-          v-if="gm_authorized && post.user.id === gm_login_user.id"
-          :to="{ name: 'posts-id', params: { id: post.id } }"
-          class="post__action"
-        >
-          <b-icon-pencil-square />
-        </nuxt-link>
         <app-post
-          :author="post.user.name"
-          :body="post.body"
-          :created_at="post.created_at"
-          :title="post.title"
+          :post="post"
+          :showEdit="showEdit(post)"
+          @onClickTitle="onClickTitle"
+          @onClickEdit="onClickEdit"
           class="post__card"
         />
       </div>
@@ -40,6 +33,20 @@ export default {
       this.posts = data.posts;
     });
   },
+
+  methods: {
+    onClickTitle(id) {
+      this.$router.push({ name: 'posts-id', params: { id } });
+    },
+
+    onClickEdit(id) {
+      this.$router.push({ name: 'posts-id-edit', params: { id } });
+    },
+
+    showEdit(post) {
+      return this.gm_authorized && post.user.id === this.gm_login_user.id;
+    },
+  },
 };
 </script>
 
@@ -49,20 +56,17 @@ export default {
   grid-template-columns: repeat(4, 1fr);
   gap: 15px;
 
-  &__box {
-    position: relative;
-  }
-
-  &__action {
-    position: absolute;
-    z-index: 1;
-    right: 5px;
-    top: 5px;
-    color: inherit;
-  }
-
   &__card {
     height: 280px;
+    box-shadow: 0 0 1px 1px rgba(black, 0);
+    position: relative;
+    margin-top: 0;
+    transition: all 0.3s ease-out;
+
+    &:hover {
+      box-shadow: 0 0 1px 1px rgba(black, 0.5);
+      margin-top: -5px;
+    }
 
     &:not(:last-child) {
       margin-bottom: 20px;

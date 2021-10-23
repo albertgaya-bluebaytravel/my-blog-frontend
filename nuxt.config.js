@@ -1,7 +1,7 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'my-blog-frontend',
+    title: 'My Blog',
     htmlAttrs: {
       lang: 'en',
     },

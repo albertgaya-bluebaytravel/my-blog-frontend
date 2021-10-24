@@ -2,15 +2,14 @@
   <b-card no-body>
     <b-card-body>
       <b-card-title class="title" @click="onClickTitle">
-        {{ post.title }}
+        {{ c_title }}
       </b-card-title>
       <b-card-text>
         {{ c_body }}
-
-        <small class="text-secondary font-italic d-block mt-3">
-          {{ c_created_at }}
-        </small>
       </b-card-text>
+      <small class="text-secondary font-italic">
+        {{ c_created_at }}
+      </small>
     </b-card-body>
 
     <template #footer>
@@ -49,24 +48,16 @@ export default {
   },
 
   computed: {
+    c_title() {
+      return this.gm_short_text(this.post.title, 30);
+    },
+
     c_body() {
-      const strLength = 100;
-
-      if (this.post.body.length < strLength) {
-        return this.post.body;
-      }
-
-      let trimBody = this.post.body.substr(0, strLength);
-      return trimBody.substr(0, trimBody.lastIndexOf(' ')) + ' ...';
+      return this.gm_short_text(this.post.body, 90);
     },
 
     c_created_at() {
-      const datePost = this.$moment(this.post.created_at);
-      const dateNow = this.$moment();
-
-      return this.$moment(dateNow).diff(datePost, 'days') < 1
-        ? datePost.fromNow()
-        : datePost.format('LL');
+      return this.gm_datetime_humanreadable(this.post.created_at);
     },
   },
 

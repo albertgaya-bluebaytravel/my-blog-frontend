@@ -44,7 +44,7 @@ export default {
     },
 
     showEdit(post) {
-      return this.gm_authorized && post.user.id === this.gm_login_user.id;
+      return this.gm_is_authenticated && post.user.id === this.gm_login_user.id;
     },
   },
 };
@@ -55,9 +55,10 @@ export default {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 15px;
+  grid-column: max-content;
 
   &__card {
-    height: 280px;
+    height: 100%;
     box-shadow: 0 0 1px 1px rgba(black, 0);
     position: relative;
     margin-top: 0;

@@ -1,6 +1,6 @@
 
 <template>
-  <div class="container mt-5">
+  <div class="container my-5" v-if="post">
     <b-button to="/" class="back-button">
       <b-icon-arrow-left-short />
       Go back
@@ -13,26 +13,31 @@
       <p>{{ post.body }}</p>
     </div>
 
+    <app-strike-through-text class="comment-title" />
+
     <app-comment-form
       :isSubmitting="commentBox.isSubmitting"
       @onSubmit="onCommentBoxSubmit"
+      v-if="gm_is_authenticated"
       class="comment-form"
     />
 
-    <app-comment-list class="comment-list" />
+    <app-comment-list :comments="comments" class="comment-list" />
   </div>
 </template>
 
 <script>
 import AppCommentForm from '@/components/Comment/Form';
 import AppCommentList from '@/components/Comment/List';
+import AppStrikeThroughText from '@/components/Utilities/StrikeThroughText';
 
 export default {
-  components: { AppCommentForm, AppCommentList },
+  components: { AppCommentForm, AppCommentList, AppStrikeThroughText },
 
   data() {
     return {
-      post: {},
+      post: null,
+      comments: [],
       commentBox: {
         isSubmitting: false,
       },
@@ -43,20 +48,18 @@ export default {
     c_author() {
       return this.post.user
         ? `Posted by: ${this.post.user.name} | ` +
-            this.$moment(this.post.created_at).format('LL')
+            this.$moment(this.post.created_at).format('LLL')
         : null;
     },
   },
 
-  async asyncData({ $axios, route }) {
-    const post = await $axios
-      .$get(`/v1/posts/${route.params.id}`)
+  async beforeCreate() {
+    this.post = await this.$axios
+      .$get(`/v1/posts/${this.$route.params.id}`)
       .then((response) => response.data.post)
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => console.log(error));
 
-    return { post };
+    this.getComments();
   },
 
   methods: {
@@ -64,9 +67,10 @@ export default {
       this.commentBox.isSubmitting = true;
 
       this.$axios
-        .$post(`/v1/posts/${this.$route.params.id}/comments`, { body })
+        .$post(`/v1/comments/posts/${this.$route.params.id}`, { body })
         .then(() => {
           this.commentBox.isSubmitting = false;
+          this.getComments();
         })
         .catch((error) => {
           console.log(error);
@@ -74,6 +78,13 @@ export default {
         .finally(() => {
           this.$emit('onCommentBoxClear');
         });
+    },
+
+    async getComments() {
+      return await this.$axios
+        .$get(`/v1/comments/posts/${this.post.id}`)
+        .then((response) => (this.comments = response.data.comments))
+        .catch((error) => console.log(error));
     },
   },
 };
@@ -88,8 +99,12 @@ export default {
   margin-top: 40px;
 }
 
-.comment-form {
+.comment-title {
   margin-top: 50px;
+}
+
+.comment-form {
+  margin-top: 20px;
 }
 
 .comment-list {

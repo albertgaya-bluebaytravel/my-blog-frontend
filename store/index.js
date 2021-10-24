@@ -1,7 +1,5 @@
-// Create Store
-export const state = () => ({})
+export const state = () => ({});
 
-// Getters
 export const getters = {
   /**
    * Check if there's a user loggin
@@ -10,7 +8,7 @@ export const getters = {
    * @returns {Boolean}
    */
   authorized(state) {
-    return state.auth.loggedIn
+    return state.auth.loggedIn;
   },
 
   /**
@@ -20,12 +18,9 @@ export const getters = {
    * @returns {Object}
    */
   auth_user(state) {
-    return state.auth.user
+    return state.auth.user;
   },
-}
+};
 
-// Mutations
-export const mutations = {}
-
-// Actions
-export const actions = {}
+export const mutations = {};
+export const actions = {};

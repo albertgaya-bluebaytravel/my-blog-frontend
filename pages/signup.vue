@@ -12,7 +12,7 @@
                     name="name"
                     type="text"
                     v-model="$v.form.name.$model"
-                    :state="validateState('name')"
+                    :state="gm_validateState('name')"
                   />
 
                   <b-form-invalid-feedback>
@@ -26,7 +26,7 @@
                     name="email"
                     type="email"
                     v-model="$v.form.email.$model"
-                    :state="validateState('email')"
+                    :state="gm_validateState('email')"
                   />
 
                   <b-form-invalid-feedback v-show="!$v.form.email.required">
@@ -44,7 +44,7 @@
                     name="password"
                     type="password"
                     v-model.trim="$v.form.password.$model"
-                    :state="validateState('password')"
+                    :state="gm_validateState('password')"
                   />
 
                   <b-form-invalid-feedback>
@@ -61,7 +61,7 @@
                     name="password_confirmation"
                     type="password"
                     v-model.trim="$v.form.password_confirmation.$model"
-                    :state="validateState('password_confirmation')"
+                    :state="gm_validateState('password_confirmation')"
                   />
 
                   <b-form-invalid-feedback

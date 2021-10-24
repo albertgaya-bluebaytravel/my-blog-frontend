@@ -38,12 +38,10 @@ export default {
 
     this.$axios
       .$get(`/v1/users/${id}/verify/${token}`)
-
       .then(() => {
         this.success = true;
-        this.$router.push('/');
+        this.$router.push('/login');
       })
-
       .catch((error) => {
         console.log(error);
         this.error = error.response.data.message;

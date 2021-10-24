@@ -12,7 +12,7 @@
                 name="email"
                 type="email"
                 v-model="$v.form.email.$model"
-                :state="validateState('email')"
+                :state="gm_validateState('email')"
               />
 
               <b-form-invalid-feedback v-show="!$v.form.email.required">
@@ -29,7 +29,7 @@
                 id="password"
                 type="password"
                 v-model.trim="$v.form.password.$model"
-                :state="validateState('password')"
+                :state="gm_validateState('password')"
               />
 
               <b-form-invalid-feedback>

@@ -10,7 +10,7 @@
                 name="title"
                 type="text"
                 v-model="$v.form.title.$model"
-                :state="validateState('title')"
+                :state="gm_validateState('title')"
               />
 
               <b-form-invalid-feedback>
@@ -25,7 +25,7 @@
                 rows="3"
                 no-resize
                 v-model="$v.form.body.$model"
-                :state="validateState('body')"
+                :state="gm_validateState('body')"
               />
 
               <b-form-invalid-feedback>

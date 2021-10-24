@@ -3,7 +3,7 @@
     <div class="offset-3 col-6">
       <b-overlay :show="submitted" v-if="!success">
         <b-card header="Edit Post">
-          <b-form @submit.stop.prevent="onSubmit" novalidate>
+          <b-form ref="form" @submit.stop.prevent="onSubmit" novalidate>
             <b-form-group label="Title" label-for="title">
               <b-form-input
                 id="title"
@@ -31,6 +31,15 @@
               <b-form-invalid-feedback>
                 This is a required field.
               </b-form-invalid-feedback>
+            </b-form-group>
+
+            <b-form-group label="Image" label-for="image">
+              <b-form-file
+                v-model="form.image"
+                id="image"
+                name="image"
+                placeholder="Choose a file"
+              />
             </b-form-group>
 
             <div class="d-flex">
@@ -62,18 +71,6 @@
 import { required } from 'vuelidate/lib/validators';
 
 export default {
-  data() {
-    return {
-      success: false,
-      submitted: false,
-      post: {},
-      form: {
-        title: '',
-        body: '',
-      },
-    };
-  },
-
   async middleware({ $axios, store, route, redirect }) {
     await $axios
       .$get(`/v1/posts/${route.params.id}`)
@@ -104,6 +101,19 @@ export default {
       });
   },
 
+  data() {
+    return {
+      success: false,
+      submitted: false,
+      post: {},
+      form: {
+        title: '',
+        body: '',
+        image: null,
+      },
+    };
+  },
+
   validations: {
     form: {
       title: {
@@ -112,6 +122,7 @@ export default {
       body: {
         required,
       },
+      image: {},
     },
   },
 
@@ -142,7 +153,13 @@ export default {
       this.submitted = true;
 
       this.$axios
-        .$delete(`/v1/posts/${this.$route.params.id}`)
+        .$delete(
+          `/v1/posts/${this.$route.params.id}`,
+          new FormData(this.$refs.form),
+          {
+            headers: { 'Content-Type': 'multipart/form-data' },
+          }
+        )
         .then(() => {
           this.success = true;
           this.$router.push('/');

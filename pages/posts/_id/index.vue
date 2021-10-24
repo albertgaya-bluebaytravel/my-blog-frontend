@@ -6,6 +6,12 @@
       Go back
     </b-button>
 
+    <div
+      v-if="post.image_full_url"
+      :style="{ backgroundImage: `url(${post.image_full_url})` }"
+      class="banner"
+    ></div>
+
     <h1>{{ post.title }}</h1>
     <small class="text-muted">{{ c_author }}</small>
 
@@ -13,7 +19,10 @@
       <p>{{ post.body }}</p>
     </div>
 
-    <app-strike-through-text class="comment-title" />
+    <app-strike-through-text
+      v-if="Boolean(comments.length)"
+      class="comment-title"
+    />
 
     <app-comment-form
       :isSubmitting="commentBox.isSubmitting"
@@ -92,6 +101,12 @@ export default {
 
 <style lang="scss" scoped>
 .back-button {
+  margin-bottom: 20px;
+}
+
+.banner {
+  height: 300px;
+  background-position: center;
   margin-bottom: 20px;
 }
 

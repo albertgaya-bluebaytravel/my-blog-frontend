@@ -3,7 +3,7 @@
     <div class="offset-3 col-6">
       <b-overlay :show="submitted" v-if="!success">
         <b-card header="Create Post">
-          <b-form @submit.stop.prevent="onSubmit" novalidate>
+          <b-form ref="form" @submit.stop.prevent="onSubmit" novalidate>
             <b-form-group label="Title" label-for="title">
               <b-form-input
                 id="title"
@@ -33,7 +33,16 @@
               </b-form-invalid-feedback>
             </b-form-group>
 
-            <div>
+            <b-form-group label="Image" label-for="image">
+              <b-form-file
+                v-model="form.image"
+                id="image"
+                name="image"
+                placeholder="Choose a file"
+              />
+            </b-form-group>
+
+            <div class="d-flex">
               <b-button type="submit" variant="info" :disabled="submitted">
                 Submit
               </b-button>
@@ -62,6 +71,7 @@ export default {
       form: {
         title: '',
         body: '',
+        image: [],
       },
     };
   },
@@ -74,6 +84,7 @@ export default {
       body: {
         required,
       },
+      image: {},
     },
   },
 
@@ -87,7 +98,9 @@ export default {
       this.submitted = true;
 
       this.$axios
-        .$post('/v1/posts', this.form)
+        .$post('/v1/posts', new FormData(this.$refs.form), {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        })
         .then(() => {
           this.success = true;
           this.$router.push('/');

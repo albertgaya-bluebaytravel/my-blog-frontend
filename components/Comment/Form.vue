@@ -9,7 +9,7 @@ a<template>
           no-resize
           v-model="$v.form.body.$model"
           placeholder="Submit your comments"
-          :state="gm_validateState('body')"
+          :state="gmValidateState('body')"
         />
 
         <b-form-invalid-feedback>

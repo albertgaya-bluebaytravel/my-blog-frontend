@@ -6,11 +6,12 @@
 </template>
 
 <script>
-import AppNav from '@/components/Nav'
+import { mapState } from 'vuex';
+import AppNav from '@/components/Nav';
 
 export default {
   components: {
     AppNav,
   },
-}
+};
 </script>

@@ -22,6 +22,7 @@ export default {
     '@/plugins/global-mixin.js',
     '@/plugins/vuelidate.js',
     '@/plugins/bootstrap-icon-vue.js',
+    '@/plugins/services.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

@@ -10,7 +10,7 @@
                 name="title"
                 type="text"
                 v-model="$v.form.title.$model"
-                :state="gm_validateState('title')"
+                :state="gmValidateState('title')"
               />
 
               <b-form-invalid-feedback>
@@ -25,7 +25,7 @@
                 rows="3"
                 no-resize
                 v-model="$v.form.body.$model"
-                :state="gm_validateState('body')"
+                :state="gmValidateState('body')"
               />
 
               <b-form-invalid-feedback>
@@ -60,6 +60,8 @@
                 Delete
               </b-button>
             </div>
+
+            <input type="hidden" name="_method" value="PATCH" />
           </b-form>
         </b-card>
       </b-overlay>
@@ -69,36 +71,37 @@
 
 <script>
 import { required } from 'vuelidate/lib/validators';
+import { mapActions } from 'vuex';
 
 export default {
-  async middleware({ $axios, store, route, redirect }) {
-    await $axios
-      .$get(`/v1/posts/${route.params.id}`)
-      .then((response) => {
-        const post = response.data.post;
+  async middleware({ $axios, params, store, redirect }) {
+    try {
+      await store.dispatch('posts/getPost', params.id);
+      const post = store.state.posts.post;
 
-        if (post.user_id !== store.getters.auth_user.id) {
-          redirect('/');
-        }
-      })
-      .catch((error) => {
-        console.log(error);
+      if (post.user_id !== store.state.auth.user.id) {
         redirect('/');
-      });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   },
 
-  async beforeMount() {
-    await this.$axios
-      .$get(`/v1/posts/${this.$route.params.id}`)
-      .then((response) => {
-        const post = response.data.post;
-        this.post = post;
-        this.form.title = post.title;
-        this.form.body = post.body;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  async asyncData({ store, params }) {
+    try {
+      const post = store.state.posts.post;
+      return {
+        post,
+        test: 'tet',
+        form: {
+          title: post.title,
+          body: post.body,
+          image: null,
+        },
+      };
+    } catch (error) {
+      console.log(error);
+    }
   },
 
   data() {
@@ -127,7 +130,12 @@ export default {
   },
 
   methods: {
-    onSubmit() {
+    ...mapActions({
+      updatePost: 'posts/updatePost',
+      deletePost: 'posts/deletePost',
+    }),
+
+    async onSubmit() {
       this.$v.form.$touch();
       this.error = '';
 
@@ -135,41 +143,32 @@ export default {
 
       this.submitted = true;
 
-      this.$axios
-        .$patch(`/v1/posts/${this.$route.params.id}`, this.form)
-        .then(() => {
-          this.success = true;
-          this.$router.push('/');
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-        .finally(() => {
-          this.submitted = false;
+      try {
+        await this.updatePost({
+          postId: this.$route.params.id,
+          data: new FormData(this.$refs.form),
         });
+        this.success = true;
+        this.$router.push('/');
+      } catch (error) {
+        console.log(error);
+      }
+
+      this.submitted = false;
     },
 
-    onDelete() {
+    async onDelete() {
       this.submitted = true;
 
-      this.$axios
-        .$delete(
-          `/v1/posts/${this.$route.params.id}`,
-          new FormData(this.$refs.form),
-          {
-            headers: { 'Content-Type': 'multipart/form-data' },
-          }
-        )
-        .then(() => {
-          this.success = true;
-          this.$router.push('/');
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-        .finally(() => {
-          this.submitted = false;
-        });
+      try {
+        await this.deletePost(this.$route.params.id);
+        this.success = true;
+        this.$router.push('/');
+      } catch (error) {
+        console.log(error);
+      }
+
+      this.submitted = false;
     },
   },
 };

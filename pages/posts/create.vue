@@ -10,7 +10,7 @@
                 name="title"
                 type="text"
                 v-model="$v.form.title.$model"
-                :state="gm_validateState('title')"
+                :state="gmValidateState('title')"
               />
 
               <b-form-invalid-feedback>
@@ -25,7 +25,7 @@
                 rows="3"
                 no-resize
                 v-model="$v.form.body.$model"
-                :state="gm_validateState('body')"
+                :state="gmValidateState('body')"
               />
 
               <b-form-invalid-feedback>
@@ -59,6 +59,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import { required } from 'vuelidate/lib/validators';
 
 export default {
@@ -71,7 +72,7 @@ export default {
       form: {
         title: '',
         body: '',
-        image: [],
+        image: null,
       },
     };
   },
@@ -89,7 +90,11 @@ export default {
   },
 
   methods: {
-    onSubmit() {
+    ...mapActions({
+      createPost: 'posts/createPost',
+    }),
+
+    async onSubmit() {
       this.$v.form.$touch();
       this.error = '';
 
@@ -97,20 +102,15 @@ export default {
 
       this.submitted = true;
 
-      this.$axios
-        .$post('/v1/posts', new FormData(this.$refs.form), {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        })
-        .then(() => {
-          this.success = true;
-          this.$router.push('/');
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-        .finally(() => {
-          this.submitted = false;
-        });
+      try {
+        await this.createPost(new FormData(this.$refs.form));
+        this.success = true;
+        this.$router.push('/');
+      } catch (error) {
+        console.log(error);
+      }
+
+      this.submitted = false;
     },
   },
 };

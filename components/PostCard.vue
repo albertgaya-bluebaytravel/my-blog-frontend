@@ -49,19 +49,28 @@ export default {
 
   computed: {
     c_title() {
-      return this.gm_short_text(this.post.title, 30);
+      return this.shortText(this.post.title, 30);
     },
 
     c_body() {
-      return this.gm_short_text(this.post.body, 90);
+      return this.shortText(this.post.body, 90);
     },
 
     c_created_at() {
-      return this.gm_datetime_humanreadable(this.post.created_at);
+      return this.gmDatetimeHumanreadable(this.post.created_at);
     },
   },
 
   methods: {
+    shortText(text, maxLength) {
+      if (text.length < maxLength) {
+        return text;
+      }
+
+      let trimText = text.substr(0, maxLength);
+      return trimText.substr(0, trimText.lastIndexOf(' ')) + '...';
+    },
+
     onClickTitle() {
       this.$emit('onClickTitle', this.post.id);
     },

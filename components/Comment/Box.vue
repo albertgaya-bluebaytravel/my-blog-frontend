@@ -26,7 +26,7 @@ export default {
 
   computed: {
     c_created_at() {
-      return this.gm_datetime_humanreadable(this.comment.created_at);
+      return this.gmDatetimeHumanreadable(this.comment.created_at);
     },
   },
 };

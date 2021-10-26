@@ -2,7 +2,7 @@
   <div class="container mt-5">
     <div class="post">
       <div v-for="post in posts" :key="post.id" class="post__box">
-        <app-post
+        <app-post-card
           :post="post"
           :showEdit="showEdit(post)"
           @onClickTitle="onClickTitle"
@@ -15,24 +15,25 @@
 </template>
 
 <script>
-import AppPost from '@/components/Post';
+import AppPostCard from '@/components/PostCard';
+import { mapState } from 'vuex';
 
 export default {
   components: {
-    AppPost,
+    AppPostCard,
   },
 
-  data() {
-    return {
-      posts: [],
-    };
+  async fetch({ store }) {
+    try {
+      await store.dispatch('posts/getPosts');
+    } catch (error) {
+      console.log(error);
+    }
   },
 
-  mounted() {
-    this.$axios.$get('/v1/posts').then(({ data }) => {
-      this.posts = data.posts;
-    });
-  },
+  computed: mapState({
+    posts: (state) => state.posts.posts,
+  }),
 
   methods: {
     onClickTitle(id) {
@@ -44,7 +45,7 @@ export default {
     },
 
     showEdit(post) {
-      return this.gm_is_authenticated && post.user.id === this.gm_login_user.id;
+      return this.gmIsAuthenticated && post.user.id === this.gmAuthUser.id;
     },
   },
 };

@@ -19,15 +19,12 @@
       <p>{{ post.body }}</p>
     </div>
 
-    <app-strike-through-text
-      v-if="Boolean(comments.length)"
-      class="comment-title"
-    />
+    <app-strike-through-text class="comment-title" />
 
     <app-comment-form
       :isSubmitting="commentBox.isSubmitting"
       @onSubmit="onCommentBoxSubmit"
-      v-if="gm_is_authenticated"
+      v-if="gmIsAuthenticated"
       class="comment-form"
     />
 
@@ -36,6 +33,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
 import AppCommentForm from '@/components/Comment/Form';
 import AppCommentList from '@/components/Comment/List';
 import AppStrikeThroughText from '@/components/Utilities/StrikeThroughText';
@@ -45,15 +43,27 @@ export default {
 
   data() {
     return {
-      post: null,
-      comments: [],
       commentBox: {
         isSubmitting: false,
       },
     };
   },
 
+  async fetch({ store, params }) {
+    try {
+      await store.dispatch('posts/getPost', params.id);
+      await store.dispatch('comments/getPostComments', params.id);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   computed: {
+    ...mapState({
+      post: (state) => state.posts.post,
+      comments: (state) => state.comments.postComments,
+    }),
+
     c_author() {
       return this.post.user
         ? `Posted by: ${this.post.user.name} | ` +
@@ -62,38 +72,28 @@ export default {
     },
   },
 
-  async beforeCreate() {
-    this.post = await this.$axios
-      .$get(`/v1/posts/${this.$route.params.id}`)
-      .then((response) => response.data.post)
-      .catch((error) => console.log(error));
-
-    this.getComments();
-  },
-
   methods: {
-    onCommentBoxSubmit(body) {
+    ...mapActions({
+      createPostComment: 'comments/createPostComment',
+      getPostComments: 'comments/getPostComments',
+    }),
+
+    async onCommentBoxSubmit(body) {
       this.commentBox.isSubmitting = true;
+      const postId = this.$route.params.id;
 
-      this.$axios
-        .$post(`/v1/comments/posts/${this.$route.params.id}`, { body })
-        .then(() => {
-          this.commentBox.isSubmitting = false;
-          this.getComments();
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-        .finally(() => {
-          this.$emit('onCommentBoxClear');
+      try {
+        await this.createPostComment({
+          postId,
+          data: { body },
         });
-    },
+        this.commentBox.isSubmitting = false;
+        await this.getPostComments(postId);
+      } catch (error) {
+        console.log(error);
+      }
 
-    async getComments() {
-      return await this.$axios
-        .$get(`/v1/comments/posts/${this.post.id}`)
-        .then((response) => (this.comments = response.data.comments))
-        .catch((error) => console.log(error));
+      this.$emit('onCommentBoxClear');
     },
   },
 };

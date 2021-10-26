@@ -6,7 +6,7 @@
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse id="nav-collapse" is-nav>
-        <b-navbar-nav v-if="gm_is_authenticated">
+        <b-navbar-nav v-if="gmIsAuthenticated">
           <b-nav-item to="/posts/create"
             ><b-icon-file-earmark-plus /> Create Post</b-nav-item
           >
@@ -26,10 +26,10 @@
             >
           </b-nav-form> -->
 
-          <b-nav-item-dropdown right v-if="gm_is_authenticated">
+          <b-nav-item-dropdown right v-if="gmIsAuthenticated">
             <!-- Using 'button-content' slot -->
             <template #button-content>
-              <b-icon-person-circle /> {{ gm_login_user.name }}
+              <b-icon-person-circle /> {{ gmAuthUser.name }}
             </template>
             <!-- <b-dropdown-item href="#">Profile</b-dropdown-item> -->
             <b-dropdown-item href="#" @click="onSignOut">
@@ -49,17 +49,13 @@
 <script>
 export default {
   methods: {
-    onSignOut() {
-      this.$auth
-        .logout('laravelSantum')
-
-        .then(() => {
-          this.$router.push('/login');
-        })
-
-        .catch((error) => {
-          console.log(error);
-        });
+    async onSignOut() {
+      try {
+        await this.$auth.logout('laravelSantum');
+        this.$router.push('/login');
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

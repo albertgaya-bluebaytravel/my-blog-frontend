@@ -74,7 +74,7 @@ import { required } from 'vuelidate/lib/validators';
 import { mapActions } from 'vuex';
 
 export default {
-  async middleware({ $axios, params, store, redirect }) {
+  async middleware({ params, store, redirect }) {
     try {
       await store.dispatch('posts/getPost', params.id);
       const post = store.state.posts.post;

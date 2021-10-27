@@ -1,4 +1,4 @@
-a<template>
+<template>
   <b-overlay :show="isSubmitting">
     <b-form @submit.stop.prevent="onSubmit" novalidate>
       <b-form-group>
@@ -10,16 +10,29 @@ a<template>
           v-model="$v.form.body.$model"
           placeholder="Submit your comments"
           :state="gmValidateState('body')"
-        />
+        >
+        </b-form-textarea>
 
         <b-form-invalid-feedback>
           This is a required field.
         </b-form-invalid-feedback>
       </b-form-group>
 
-      <b-button type="submit" variant="info" :disabled="isSubmitting">
-        Submit
-      </b-button>
+      <div>
+        <b-button variant="info" :disabled="isSubmitting" type="submit">
+          Submit
+        </b-button>
+
+        <b-button
+          v-if="Boolean(this.comment)"
+          variant="link"
+          :disabled="isSubmitting"
+          @click="onCancel"
+          type="button"
+        >
+          Cancel
+        </b-button>
+      </div>
     </b-form>
   </b-overlay>
 </template>
@@ -28,17 +41,23 @@ a<template>
 import { required } from 'vuelidate/lib/validators';
 
 export default {
+  emits: ['onSubmit', 'onCancel', 'onCommentBoxClear'],
+
   props: {
     isSubmitting: {
       type: Boolean,
       default: false,
+    },
+    comment: {
+      type: Object,
+      default: null,
     },
   },
 
   data() {
     return {
       form: {
-        body: '',
+        body: this.comment ? this.comment.body : '',
       },
     };
   },
@@ -63,6 +82,10 @@ export default {
     onClear() {
       this.$v.form.$reset();
       this.form.body = '';
+    },
+
+    onCancel() {
+      this.$emit('onCancel');
     },
   },
 

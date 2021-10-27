@@ -4,7 +4,7 @@
       v-for="comment in comments"
       :key="comment.id"
       :comment="comment"
-      :commentUser="comment.user"
+      :user="comment.user"
       class="comment-box"
     />
   </div>

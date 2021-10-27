@@ -52,7 +52,7 @@ export default {
   async fetch({ store, params }) {
     try {
       await store.dispatch('posts/getPost', params.id);
-      await store.dispatch('comments/getPostComments', params.id);
+      await store.dispatch('postsComments/getPostComments', params.id);
     } catch (error) {
       console.log(error);
     }
@@ -61,7 +61,7 @@ export default {
   computed: {
     ...mapState({
       post: (state) => state.posts.post,
-      comments: (state) => state.comments.postComments,
+      comments: (state) => state.postsComments.postComments,
     }),
 
     c_author() {
@@ -74,8 +74,8 @@ export default {
 
   methods: {
     ...mapActions({
-      createPostComment: 'comments/createPostComment',
-      getPostComments: 'comments/getPostComments',
+      createPostComment: 'postsComments/createPostComment',
+      getPostComments: 'postsComments/getPostComments',
     }),
 
     async onCommentBoxSubmit(body) {

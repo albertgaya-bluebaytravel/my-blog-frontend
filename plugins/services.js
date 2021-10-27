@@ -1,9 +1,9 @@
-import posts from '@/services/posts';
-import comments from '@/services/comments';
+import postService from '@/services/postService';
+import postCommentService from '@/services/postCommentService';
 
 export default ({ $axios }, inject) => {
   inject('services', {
-    posts: posts($axios),
-    comments: comments($axios),
+    postService: postService($axios),
+    postCommentService: postCommentService($axios),
   });
 };

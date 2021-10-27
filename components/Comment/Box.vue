@@ -73,8 +73,8 @@ export default {
 
   methods: {
     ...mapActions({
-      updateComment: 'comments/updateComment',
-      deleteComment: 'comments/deleteComment',
+      updatePostComment: 'postsComments/updatePostComment',
+      deletePostComment: 'postsComments/deletePostComment',
     }),
 
     showEditForm() {
@@ -84,7 +84,8 @@ export default {
     async onSubmit(body) {
       this.isSubmitting = true;
       try {
-        await this.updateComment({
+        await this.updatePostComment({
+          postId: this.$route.params.id,
           commentId: this.comment.id,
           data: { body },
         });
@@ -103,7 +104,10 @@ export default {
     },
 
     onDelete() {
-      this.deleteComment(this.comment.id);
+      this.deletePostComment({
+        postId: this.$route.params.id,
+        commentId: this.comment.id,
+      });
       this.$destroy();
       this.$el.parentNode.removeChild(this.$el);
     },

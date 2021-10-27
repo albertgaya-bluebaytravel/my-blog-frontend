@@ -15,7 +15,7 @@ export const mutations = {
 
 export const actions = {
   async getPosts({ commit }) {
-    const { data } = await this.$services.posts.all();
+    const { data } = await this.$services.postService.all();
     commit('SET_POSTS', data.posts);
   },
 
@@ -23,23 +23,23 @@ export const actions = {
     let post = state.posts.find((post) => post.id === postId);
 
     if (!post) {
-      post = (await this.$services.posts.find(postId)).data.post;
+      post = (await this.$services.postService.find(postId)).data.post;
     }
 
     commit('SET_POST', post);
   },
 
   async createPost({}, data) {
-    await this.$services.posts.create(data);
+    await this.$services.postService.create(data);
   },
 
   async updatePost({ commit }, { postId, data }) {
-    await this.$services.posts.update(postId, data);
+    await this.$services.postService.update(postId, data);
     commit('SET_POST', {});
   },
 
   async deletePost({ commit }, postId) {
-    await this.$services.posts.delete(postId);
+    await this.$services.postService.delete(postId);
     commit('SET_POST', {});
   },
 };

@@ -1,8 +1,19 @@
 <template>
   <div class="strike-through-text">
-    <span>Comments</span>
+    <span>{{ text }}</span>
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    text: {
+      type: String,
+      required: true,
+    },
+  },
+};
+</script>
 
 <style lang="scss" scoped>
 .strike-through-text {

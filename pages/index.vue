@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import AppPostCard from '@/components/PostCard';
+import AppPostCard from '@/components/Posts/PostCard';
 import { mapState } from 'vuex';
 
 export default {

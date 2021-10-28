@@ -8,7 +8,7 @@
         {{ c_body }}
       </b-card-text>
       <small class="text-secondary font-italic">
-        {{ c_created_at }}
+        {{ c_createdAt }}
       </small>
     </b-card-body>
 
@@ -24,7 +24,8 @@
             @click="onClickEdit"
             class="action-icon"
           />
-          <b-icon-chat-dots-fill class="action-icon" />
+
+          <b-icon-chat-dots-fill v-if="c_showCommentIcon" />
         </div>
       </div>
     </template>
@@ -50,14 +51,19 @@ export default {
   computed: {
     c_title() {
       return this.shortText(this.post.title, 30);
+      ``;
     },
 
     c_body() {
       return this.shortText(this.post.body, 90);
     },
 
-    c_created_at() {
+    c_createdAt() {
       return this.gmDatetimeHumanreadable(this.post.created_at);
+    },
+
+    c_showCommentIcon() {
+      return this.post.comments.length > 0;
     },
   },
 

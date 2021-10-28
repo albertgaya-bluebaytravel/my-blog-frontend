@@ -8,7 +8,7 @@
           rows="3"
           no-resize
           v-model="$v.form.body.$model"
-          placeholder="Submit your comments"
+          :placeholder="placeholder"
           :state="gmValidateState('body')"
         >
         </b-form-textarea>
@@ -24,7 +24,7 @@
         </b-button>
 
         <b-button
-          v-if="Boolean(this.comment)"
+          v-if="canCancel"
           variant="link"
           :disabled="isSubmitting"
           @click="onCancel"
@@ -41,7 +41,7 @@
 import { required } from 'vuelidate/lib/validators';
 
 export default {
-  emits: ['onSubmit', 'onCancel', 'onCommentBoxClear'],
+  emits: ['onSubmit', 'onCancel'],
 
   props: {
     isSubmitting: {
@@ -51,6 +51,14 @@ export default {
     comment: {
       type: Object,
       default: null,
+    },
+    canCancel: {
+      type: Boolean,
+      default: false,
+    },
+    placeholder: {
+      type: String,
+      default: 'Submit your comments',
     },
   },
 
@@ -87,10 +95,6 @@ export default {
     onCancel() {
       this.$emit('onCancel');
     },
-  },
-
-  created() {
-    this.$parent.$on('onCommentBoxClear', this.onClear);
   },
 };
 </script>

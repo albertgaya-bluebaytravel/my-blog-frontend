@@ -48,4 +48,10 @@ export default ($axios) => ({
       data
     );
   },
+
+  deleteCommentReply(postId, commentId, replyId) {
+    return $axios.$delete(
+      `/v1/posts/${postId}/comments/${commentId}/replies/${replyId}`
+    );
+  },
 });

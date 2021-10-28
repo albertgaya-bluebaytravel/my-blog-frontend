@@ -53,6 +53,7 @@
         :key="comment.id"
         :comment="comment"
         :onSubmitEditForm="_onSubmitReplyEditForm"
+        :onDelete="_onReplyDelete"
         class="reply-box"
       />
     </div>
@@ -99,6 +100,10 @@ export default {
       default: () => {},
     },
     onSubmitReplyEditForm: {
+      type: Function,
+      default: () => {},
+    },
+    onReplyDelete: {
       type: Function,
       default: () => {},
     },
@@ -170,6 +175,10 @@ export default {
 
     async _onSubmitReplyEditForm(replyId, data) {
       await this.onSubmitReplyEditForm(this.comment.id, replyId, data);
+    },
+
+    _onReplyDelete(replyId) {
+      this.onReplyDelete(this.comment.id, replyId);
     },
   },
 };

@@ -44,4 +44,14 @@ export default {
     comment.replies.splice(replyIndex, 1, reply);
     state.comments.splice(commentIndex, 1, comment);
   },
+
+  DELETE_COMMENT_REPLY(state, { commentId, replyId }) {
+    let comment = state.comments.find((comment) => comment.id === commentId);
+    const index = state.comments.findIndex(
+      (comment) => comment.id === commentId
+    );
+
+    comment.replies = comment.replies.filter((reply) => reply.id !== replyId);
+    state.comments.splice(index, 1, comment);
+  },
 };

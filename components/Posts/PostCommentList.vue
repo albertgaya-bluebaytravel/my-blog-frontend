@@ -18,6 +18,7 @@
       :onDelete="onDelete"
       :onSubmitReplyForm="onSubmitReplyForm"
       :onSubmitReplyEditForm="onSubmitReplyEditForm"
+      :onReplyDelete="onReplyDelete"
       hasReply
       class="comment-box"
     />
@@ -71,6 +72,7 @@ export default {
       deleteComment: 'posts/deleteComment',
       createCommentReply: 'posts/createCommentReply',
       updateCommentReply: 'posts/updateCommentReply',
+      deleteCommentReply: 'posts/deleteCommentReply',
     }),
 
     async onSubmitForm(body) {
@@ -130,6 +132,14 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+
+    onReplyDelete(commentId, replyId) {
+      this.deleteCommentReply({
+        postId: this.postId,
+        commentId,
+        replyId,
+      });
     },
   },
 };

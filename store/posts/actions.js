@@ -85,4 +85,9 @@ export default {
       reply: response.data.comment,
     });
   },
+
+  deleteCommentReply({ commit }, { postId, commentId, replyId }) {
+    this.$services.postService.deleteCommentReply(postId, commentId, replyId);
+    commit('DELETE_COMMENT_REPLY', { commentId, replyId });
+  },
 };

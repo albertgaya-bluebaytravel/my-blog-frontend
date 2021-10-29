@@ -19,7 +19,11 @@
       :onSubmitReplyForm="onSubmitReplyForm"
       :onSubmitReplyEditForm="onSubmitReplyEditForm"
       :onReplyDelete="onReplyDelete"
-      hasReply
+      canReply
+      :canEdit="isCommentOwner(comment)"
+      :canDelete="isCommentOwner(comment)"
+      :canEditReply="isCommentOwner"
+      :canDeleteReply="isCommentOwner"
       class="comment-box"
     />
   </div>
@@ -140,6 +144,10 @@ export default {
         commentId,
         replyId,
       });
+    },
+
+    isCommentOwner(comment) {
+      return this.gmIsAuthenticated && this.gmAuthUser.id === comment.user_id;
     },
   },
 };

@@ -9,13 +9,15 @@
           <p>{{ comment.body }}</p>
 
           <div>
-            <b-link v-if="hasReply" @click="showReplyForm">Reply</b-link>
-            <div v-if="isOwner" class="d-inline">
-              <span v-if="hasReply" class="text-light">|</span>
-              <b-link @click="showEditForm">Edit</b-link>
-              <span class="text-light">|</span>
-              <b-link @click="_onDelete" class="text-danger">Delete</b-link>
-            </div>
+            <b-link v-if="canReply" @click="showReplyForm">Reply</b-link>
+            <span v-if="canReply && (canEdit || canDelete)" class="text-light">
+              |
+            </span>
+            <b-link v-if="canEdit" @click="showEditForm">Edit</b-link>
+            <span v-if="canEdit" class="text-light">|</span>
+            <b-link v-if="canDelete" @click="_onDelete" class="text-danger">
+              Delete
+            </b-link>
           </div>
         </div>
 
@@ -54,6 +56,8 @@
         :comment="comment"
         :onSubmitEditForm="_onSubmitReplyEditForm"
         :onDelete="_onReplyDelete"
+        :canEdit="canEditReply(comment)"
+        :canDelete="canDeleteReply(comment)"
         class="reply-box"
       />
     </div>
@@ -91,9 +95,25 @@ export default {
       type: Function,
       default: () => {},
     },
-    hasReply: {
+    canReply: {
       type: Boolean,
       default: false,
+    },
+    canEdit: {
+      type: Boolean,
+      default: false,
+    },
+    canDelete: {
+      type: Boolean,
+      default: false,
+    },
+    canEditReply: {
+      type: Function,
+      default: () => {},
+    },
+    canDeleteReply: {
+      type: Function,
+      default: () => {},
     },
     onSubmitReplyForm: {
       type: Function,
@@ -123,12 +143,6 @@ export default {
   computed: {
     createdAt() {
       return this.gmDatetimeHumanreadable(this.comment.created_at);
-    },
-
-    isOwner() {
-      return (
-        this.gmIsAuthenticated && this.comment.user.id === this.gmAuthUser.id
-      );
     },
 
     showReplies() {
